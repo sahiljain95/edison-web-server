@@ -1,0 +1,113 @@
+
+
+a {
+  color: #00B7FF;
+}
+
+header {
+  text-align: center;
+  font-family: 'Roboto',sans-serif;
+  font-weight: 700;
+  font-size: 48px;
+  color: #fff;
+  padding: 20px;
+  background-color: #008000;
+}
+
+.introdution {
+  border: 1px solid #000;
+  text-align: center;
+  font-size: 16px;
+  padding: 20px;
+}
+
+.row.sensors {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 20px;
+  padding: 0px;
+}
+
+.col-sm-5.sensor-item {
+  margin: 20px;
+  padding: 0px;
+  border: 1px solid #000;
+  text-align: center;
+  font-family: Helvetica, sans-serif;
+}
+
+.sensor-heading {
+  padding: 10px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #008000;
+}
+
+.sensor-content, .analysis-box {
+  margin-top: 10px;
+}
+
+.analysis-box {
+  padding-top: 10px;
+}
+
+#proximityState {
+  color: #d9534f;
+}
+
+#temperatureState {
+  color: #5cb85c;
+}
+.form-group {
+  text-align: left;
+  margin:0px 10px;
+}
+
+#sendSMS {
+  float: left;
+  margin:5px 10px;
+}
+
+
+#proximityValue, #temperatureValue, #soundValue {
+
+  font-family: 'Roboto', Helvetica, sans-serif;
+  font-size: 64px;
+  text-align: center;
+  padding: 10px;
+}
+
+ul {
+  padding: 0px;
+  font-size: 16px;
+}
+
+li {
+  display: block;
+}
+
+footer .col-sm-4 {
+  padding: 20px 0;
+  font-size: 16px;
+  color: #808080;
+}
+
+footer .row {
+  display: flex;
+  align-items: center;
+}
+
+footer .col-sm-8 {
+  display: flex;
+  justify-content: flex-end;
+}
+
+footer ul {
+  list-style: none;
+}
+
+footer li img {
+  width: 32px;
+  height: 32px;
+}

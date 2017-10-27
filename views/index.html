@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Intel Edison Web Server Project</title>
+	<meta charset="utf-8" name="viewport", content="width=device-width", initial-scale="1"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/bootstrap-theme.min.css">
+</head>
+<body onload="updateAll()">
+	<header>
+		Multi Purpose Assitant
+  </header>
+
+	<p class = "introdution">
+		The multi purpose assistant is at your service!
+	</p>
+
+ <section class = "sensor-funcitonality">
+	<div class="row sensors">
+		<div class = "col-sm-5 sensor-item">
+			<p class = "sensor-heading">
+				Temperature Sensor
+			</p>
+
+			<div class = "sensor-content">
+				<p> The temperature sensor measures the temperature output of the surrounding region. It may be used to monitor plant health, monitor high-low temperature for health conditions.
+			</div>
+
+		</br>
+		<h4> Sensor Value </h4>
+		<div class="sensor-value">
+			<span id = "temperatureValue"> Null!</span>
+		</div>
+		<button class ="btn btn-primary" onclick="getTemperature()"> Get Reading now! </button>
+
+		<div class = "analysis-box">
+			<ul>
+				<li> State: <span id="temperatureState">Null!</span></li>
+				<li> Last updated: <span id="temperatureTimestamp"> </span> </li>
+			</ul>
+		</div>
+
+		</div>
+
+		<div class = "col-sm-5 sensor-item">
+			<div class = "sensor-heading">
+				Proximity Sensor
+			</div>
+			<div class = "sensor-content">
+				<p> The proximity sensor measures the proximity of a unwanted entity in the surrounding region. It may be used to detect undesired activity in a region or protect food from mosquitoes.
+			</div>
+	  	</br>
+			<h4> Sensor Value </h4>
+			<div class="sensor-value">
+				<span id = "proximityValue"> Null!</span>
+			</div>
+			<button class ="btn btn-primary" onclick="getProximity()"> Get Reading now! </button>
+
+			<div class = "analysis-box">
+				<ul>
+					<li> State: <span id="proximityState">CRITICAL!</span></li>
+					<li> Last updated: <span id="proximityTimestamp"> </span> </li>
+				</ul>
+			</div>
+
+		</div>
+	</div>
+
+</section>
+
+<section class = "fun-time">
+
+	<div class="row sensors">
+
+		<div class = "col-sm-5 sensor-item">
+			<div class = "sensor-heading">
+				Send a message!
+			</div>
+			<div class = "sensor-content">
+				<p> Send a message using the Intel Edison. Just type in the message below!
+			</div>
+
+			<div class="form-group">
+			  <label for="message">Message</label>
+			  <input type="text" class="form-control" id="message">
+			</div>
+			<div class="form-group">
+			  <label for="phone">Mobile number:</label>
+			  <input type="number" class="form-control" id="phone">
+			</div>
+			<button class ="btn btn-primary" id = "sendSMS" onclick="sendMessage()"> Send SMS!</button>
+		</div>
+
+		<div class = "col-sm-5 sensor-item">
+			<div class = "sensor-heading">
+				Sound Detection Module
+			</div>
+			<div class = "sensor-content">
+				<p> The sound detection module can detect sounds nearby. This can be used to trigger various events.
+			</div>
+			</br>
+			<h4> Sensor Value </h4>
+			<div class="sensor-value">
+				<span id = "soundValue"> Null! </span>
+			</div>
+			<button class ="btn btn-primary" onclick="getSound()"> Get Reading now! </button>
+
+			<div class = "analysis-box">
+				<ul>
+					<li> State: <span id="soundState">CRITICAL!</span></li>
+					<li> Last updated: <span id="soundTimestamp"> </span> </li>
+				</ul>
+			</div>
+
+		</div>
+
+	</div>
+
+</section>
+
+  <footer>
+		<div class = "row">
+
+			<div class = "col-sm-4">
+				&copy; Copyright 2016 @sahiljain112
+			</div>
+
+			<ul class="col-sm-8">
+        <li class="col-sm-1">
+        </li>
+        <li class="col-sm-1">
+        </li>
+        <li class="col-sm-1">
+        </li>
+      </ul>
+
+		</div>
+  </footer>
+	<script>
+
+  window.setInterval(updateAll,10000);
+
+    function getIP(){
+        return 'localhost'; // Can be changed later.
+    }
+
+		function updateAll(){
+			var ip = getIP();
+			fetch('http://' + ip + ':3000/query/update')
+			 .then(function(response){
+				return response.json();
+			}).then(function(response){
+
+					console.log("All update response:");
+				  console.log(response);
+					tempUpdate(response);
+					proxUpdate(response);
+					soundUpdate(response);
+
+			}).catch(function(error){
+	          alert('Error');
+			  console.log(error);
+			});
+		}
+
+	 function getTemperature(){
+    var ip = getIP();
+		fetch('http://' + ip + ':3000/query/temperature')
+		 .then(function(response){
+			return response.json();
+		 })
+    .then(function(response){
+
+				 console.log("Temperature sensor");
+         console.log(response);
+				 tempUpdate(response);
+
+		}).catch(function(error){
+          alert('Error');
+		  console.log(error);
+		});
+	}
+
+	function getProximity() {
+		var ip = getIP();
+		fetch('http://' + ip + ':3000/query/proximity')
+        .then(function(response){
+			return response.json();
+		})
+		.then(function(response){
+			console.log("Proximity sensor");
+			console.log(response);
+			proxUpdate(response);
+
+		}).catch(function(error){
+			alert('Error');
+			console.log(error);
+		});
+	}
+
+	function getSound() {
+
+		var ip = getIP();
+		fetch('http://' + ip + ':3000/query/sound')
+				.then(function(response){
+			return response.json();
+		})
+		.then(function(response){
+			console.log("Sound sensor");
+			console.log(response);
+			soundUpdate(response);
+
+		}).catch(function(error){
+			alert('Error');
+			console.log(error);
+		});
+
+	}
+
+	function tempUpdate(response) {
+
+		 document.getElementById('temperatureTimestamp').innerHTML = response.timeStamp;
+		 document.getElementById('temperatureState').innerHTML = response.tempState;
+		 var myElement = document.querySelector("#temperatureState");
+		 if(response.tempState === 'CRITICAL'){
+				 myElement.style.color = '#F00';
+		 }
+		 else if(response.tempState === 'SAFE'){
+			 myElement.style.color = '#5cb85c';
+		 }
+		 else if(response.tempState === 'WARNING'){
+			 myElement.style.color = '#f0ad4e';
+		 }
+		 document.getElementById('temperatureValue').innerHTML = response.tempValue;
+
+	}
+
+	function proxUpdate(response) {
+
+		document.getElementById('proximityTimestamp').innerHTML = response.timeStamp;
+		document.getElementById('proximityState').innerHTML = response.proximityState;
+		var myElement = document.querySelector("#proximityState");
+		if(response.proximityState === 'UNSAFE'){
+				myElement.style.color = '#F00';
+		}
+		else if(response.proximityState === 'SAFE'){
+			myElement.style.color = '#5cb85c';
+		}
+		document.getElementById('proximityValue').innerHTML = response.proximityValue;
+	}
+
+	function soundUpdate(response) {
+
+		document.getElementById('soundTimestamp').innerHTML = response.timeStamp;
+		document.getElementById('soundState').innerHTML = response.soundState;
+		var myElement = document.querySelector("#soundState");
+		if(response.soundState === 'UNSAFE'){
+				myElement.style.color = '#F00';
+		}
+		else if(response.soundState === 'SAFE'){
+			myElement.style.color = '#5cb85c';
+		}
+		else if(response.soundState === 'WARNING'){
+			myElement.style.color = '#f0ad4e';
+		}
+		document.getElementById('soundValue').innerHTML = response.soundValue;
+	}
+
+	function sendMessage() {
+		var number = document.getElementById('phone');
+		var message = document.getElementById('message');
+		console.log(number.value + " " +message.value);
+		console.log('Requesting server to send SMS');
+
+		var numberVal = number.value;
+		var messageVal = message.value;
+		// var data = new FormData();
+    //  data.append( "json", JSON.stringify({
+		// 	 number: numberVal,
+		// 	 message: messageVal
+		//  }));
+        var ip = getIP();
+		fetch('http://'+ ip +':3000/query/message/' + numberVal + '/' + messageVal, {
+			method: 'post'
+		})
+		.then(function(response){
+			console.log(response);
+			alert('Message sent successfully!');
+
+		}).catch(function(error){
+			console.log(error);
+			alert('Failed! Try Again!');
+		});
+		console.log('Server response complete');
+	}
+
+	</script>
+  <script src = "/javascripts/jquery-3.1.1.min.js"/>
+  <script src = "/javascripts/bootstrap.min.js" />
+
+</body>
+</html>
